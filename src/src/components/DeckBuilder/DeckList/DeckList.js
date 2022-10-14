@@ -9,7 +9,7 @@ const DeckList = (props) => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3001/get-decks", {
+      .post("https://cheekia-server.loca.lt/get-decks", {
         user: user.userID,
       })
       .then((res) => {

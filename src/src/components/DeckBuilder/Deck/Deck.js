@@ -29,7 +29,7 @@ const Deck = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/get-cards", {
+      .get("https://cheekia-server.loca.lt/get-cards", {
         params: {
           name: nameFilterState,
           land: Object.keys(landFilterState).find(
@@ -119,7 +119,7 @@ const Deck = (props) => {
   const saveDeck = () => {
     const data = new FormData();
     axios
-      .post("http://localhost:3001/save-deck", {
+      .post("https://cheekia-server.loca.lt/save-deck", {
         user: user.userID,
         deck: JSON.stringify(deckState),
       })
@@ -204,6 +204,7 @@ const Deck = (props) => {
           style={{
             display: "flex",
             flexWrap: "wrap",
+            flexDirection: "column",
             height: "20vh",
             width: "70vw",
             justifyContent: "space-evenly",
@@ -228,15 +229,13 @@ const Deck = (props) => {
         }}
       >
         <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text>
-              <Badge pill variant="primary">
-                {parseFloat(deckState.cost).toFixed(1)}
-              </Badge>
-            </InputGroup.Text>
-            <InputGroup.Text>{deckState.cards.length}/30</InputGroup.Text>
-            <InputGroup.Text id="basic-addon1">Name:</InputGroup.Text>
-          </InputGroup.Prepend>
+          <InputGroup.Text>
+            <Badge pill bg="primary">
+              {parseFloat(deckState.cost).toFixed(1)}
+            </Badge>
+          </InputGroup.Text>
+          <InputGroup.Text>{deckState.cards.length}/30</InputGroup.Text>
+          <InputGroup.Text id="basic-addon1">Name:</InputGroup.Text>
           <FormControl
             onChange={setName}
             placeholder={deckState.deck_name}
@@ -245,9 +244,7 @@ const Deck = (props) => {
           />
         </InputGroup>
         <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text id="basic-addon2">Cover:</InputGroup.Text>
-          </InputGroup.Prepend>
+          <InputGroup.Text id="basic-addon2">Cover:</InputGroup.Text>
           <FormControl
             onChange={setName}
             readOnly
