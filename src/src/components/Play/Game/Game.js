@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Board from "./Board/Board";
 import Hand from "./Hand/Hand";
 import Wheel from "./Wheel/Wheel";
@@ -10,10 +11,21 @@ import EndGameButton from "../UI/EndGameButton/EndGameButton";
 import { useStore } from "../../../hooks/store";
 import User from "../../../hooks/auth";
 import images_ui from "../../../assets/images/ui/images_ui";
+import Button from "react-bootstrap/Button";
+
+import sounds from "../../../assets/sounds/sounds";
+
+const audio = new Audio(sounds.prrrr);
 
 const Game = React.memo((props) => {
   const [state, dispatch] = useStore();
   const user = useContext(User);
+
+  const history = useHistory();
+
+  const quitGame = () => {
+    history.replace("/play");
+  };
 
   //console.log("STATE_UPDATE", state);
 
@@ -49,6 +61,9 @@ const Game = React.memo((props) => {
           action: action,
         };
         dispatch("SET_STATE_PLAYER_AND_DATA", payload);
+        if (action == "SUMMON_CREATURE") {
+          audio.play();
+        }
       }
     );
 
@@ -101,6 +116,8 @@ const Game = React.memo((props) => {
           JSON.stringify(state.data[props.player])
         );
         break;
+      case "SUMMON_CREATURE":
+        audio.play();
       case "BUILD_TILE":
       case "DRAW_CARD":
       case "SELECT_EVENT":
@@ -108,7 +125,6 @@ const Game = React.memo((props) => {
       case "PROCESS_EVENT_TILE":
       case "PROCESS_GIFT_OCCUPANT":
       case "CHOOSE_CARD":
-      case "SUMMON_CREATURE":
       case "MOVE_OCCUPANT":
       case "ATTACK_OCCUPANT":
       case "ATTACK_GOD":
@@ -184,6 +200,9 @@ const Game = React.memo((props) => {
         WINNER: {state.data[state.data.status.winner].name}
       </h1>
       <img src={images_ui.cheekWinner} width="50%"></img>
+      <Button onClick={quitGame} variant="danger" type="button">
+        QUIT GAME
+      </Button>
     </div>
   ) : (
     <div style={{ display: "flex", height: "100vh" }}>
